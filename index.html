@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AcolitApp</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+
+    <!-- Formulário para coletar informações -->
+    <form id="acolitForm">
+        <label for="usarTuribulo">Hoje nós usaremos o turíbulo? (S/N):</label>
+        <input type="text" id="usarTuribulo" required>
+        <br>
+
+        <label for="quantidadeAcolitos">Quantos acólitos irão servir hoje?! </label>
+        <input type="number" id="quantidadeAcolitos" required>
+        <br>
+
+        <div id="acolitosInputs">
+            <!-- Os campos de informações dos acólitos serão adicionados aqui dinamicamente -->
+        </div>
+
+        <button type="submit">Vamos</button>
+    </form>
+
+    <!-- Resultados exibidos na tela -->
+    <div id="resultados">
+        <h2>Informações dos acólitos e suas pontuações:</h2>
+        <pre id="informacoesAcolitos"></pre>
+        
+        <h2>Alocação de funções para a próxima missa:</h2>
+        <pre id="alocacaoFuncoes"></pre>
+    </div>
+
+    <script>
+        document.getElementById('acolitForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Inicialização de variáveis
+            var acolitos = [];  // Array para armazenar informações dos acólitos
+
+            // Objeto para associar funções a pontuações
+            var pontuacoes_funcoes = {
+                "turibulo": 0,
+                "missal": 2,
+                "credencia": 3,
+                "ambao": 4,
+                "sino": 5,
+                "acompanhante": 6,
+            };
+
+            // Verificação do uso do turíbulo
+            var usarTuribulo = document.getElementById('usarTuribulo').value.trim().toLowerCase() === "s";
+
+            // Quantidade de acólitos
+            var quantidadeAcolitos = parseInt(document.getElementById('quantidadeAcolitos').value);
+
+            // Coleta de informações de cada acólito
+            for (var i = 0; i < quantidadeAcolitos; i++) {
+                var nomeAcolito = prompt("Qual o nome do acólito " + (i + 1) + ": ");
+                var funcaoAnterior = prompt("Qual a função anterior de " + nomeAcolito + "? ").trim().toLowerCase();
+
+                // Se a função anterior for "banco" ou em branco, atribua a maior pontuação
+                var pontuacaoFuncaoAnterior = 0;
+                if (funcaoAnterior === "banco" || funcaoAnterior === "") {
+                    pontuacaoFuncaoAnterior = 8;
+                } else {
+                    // Caso contrário, obtenha a pontuação da função anterior do objeto
+                    pontuacaoFuncaoAnterior = pontuacoes_funcoes[funcaoAnterior] || 0;
+                }
+
+                var ordemChegada = parseInt(prompt("Qual a ordem de chegada de " + nomeAcolito + "? "));
+
+                // Calcula a pontuação com base na função anterior e na ordem de chegada
+                var pontuacaoOrdemChegada = quantidadeAcolitos - ordemChegada + 1;
+                var pontuacaoTotal = pontuacaoFuncaoAnterior + pontuacaoOrdemChegada;
+
+                // Cria um objeto para representar o acólito e armazena suas informações e pontuação
+                var acolito = {
+                    nome: nomeAcolito,
+                    funcaoAnterior: funcaoAnterior,
+                    ordemChegada: ordemChegada,
+                    pontuacao: pontuacaoTotal,
+                };
+
+                // Adiciona o acólito ao array de acólitos
+                acolitos.push(acolito);
+            }
+
+            // Exibição das informações coletadas
+            var informacoesAcolitos = "\nInformações dos acólitos e suas pontuações:\n";
+            for (var j = 0; j < acolitos.length; j++) {
+                informacoesAcolitos += "Acólito " + (j + 1) + ":\n";
+                informacoesAcolitos += "Nome: " + acolitos[j].nome + "\n";
+                informacoesAcolitos += "Função anterior: " + acolitos[j].funcaoAnterior + "\n";
+                informacoesAcolitos += "Ordem de chegada: " + acolitos[j].ordemChegada + "\n";
+                informacoesAcolitos += "Pontuação: " + acolitos[j].pontuacao + "\n\n";
+            }
+
+            // Exibe as informações na tela
+            document.getElementById('informacoesAcolitos').textContent = informacoesAcolitos;
+
+            // Cria uma array de funções disponíveis
+            var funcoesDisponiveis = [];
+
+            if (usarTuribulo) {
+                funcoesDisponiveis.push("turibulo");
+            }
+            funcoesDisponiveis = funcoesDisponiveis.concat(["missal", "credencia", "ambao", "sino", "acompanhante"]);
+
+            // Ordena os acólitos com base nas pontuações, do maior para o menor
+            acolitos.sort(function (a, b) {
+                return b.pontuacao - a.pontuacao;
+            });
+
+            // Atribui funções aos acólitos
+            var funcoesAtribuidas = {};
+            var funcoesUtilizadas = new Set();
+
+            for (var k = 0; k < acolitos.length; k++) {
+                for (var l = 0; l < funcoesDisponiveis.length; l++) {
+                    var funcao = funcoesDisponiveis[l];
+                    if (!funcoesUtilizadas.has(funcao)) {
+                        funcoesAtribuidas[acolitos[k].nome] = funcao;
+                        funcoesUtilizadas.add(funcao);
+                        break;
+                    }
+                }
+                if (!funcoesAtribuidas[acolitos[k].nome]) {
+                    funcoesAtribuidas[acolitos[k].nome] = "banco";
+                }
+            }
+
+            // Exibe as funções atribuídas aos acólitos
+            var alocacaoFuncoes = "\nAlocação de funções para a próxima missa:\n";
+            for (var nomeAcolito in funcoesAtribuidas) {
+                alocacaoFuncoes += nomeAcolito + ": " + funcoesAtribuidas[nomeAcolito] + "\n";
+            }
+
+            // Exibe as informações de alocação de funções na tela
+            document.getElementById('alocacaoFuncoes').textContent = alocacaoFuncoes;
+        });
+    </script>
+</body>
+</html>
