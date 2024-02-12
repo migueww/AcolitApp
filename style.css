@@ -1,91 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@300;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400&display=swap');
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f8f8;
+    font-family: 'Montserrat Alternates', sans-serif;
+    background-color: hsl(207, 4%, 10%);
     margin: 0;
     padding: 0;
     text-align: center;
-    display: flex; /* Use flexbox para centralizar verticalmente */
+    display: flex; 
     flex-wrap: wrap;
-    justify-content: center; /* Centraliza horizontalmente */
+    justify-content: space-evenly; /* Centraliza horizontalmente */
     align-items: center; /* Centraliza verticalmente */
     min-height: 100vh;
 }
 
-.container {
-    max-width: 800px;
-    padding: 20px;
-    text-align: left;
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-}
-
-h1 {
-    color: #333;
-    margin-bottom: 20px;
-    text-align: left;
-}
-
-form {
-    padding: 20px;
-}
 
 label {
+    width: calc(100% + 20px);
     display: block;
+    color: #d1d1d1;
     margin-bottom: 10px;
     font-weight: bold;
-    text-align: left;
+    text-align: center;
 }
 
 input[type="text"],
 input[type="number"] {
-    width: 80%;
-    padding: 10px;
+    background-color: #181818;
+    color: #d1d1d1;
+    width: 100%;
+    padding: 10px 10px 10px 10px;
     margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
+    border: 1px solid rgb(38, 107, 124);
+    border-radius: 10px;
+    outline: 0;
+    font-family: 'Montserrat', sans-serif;
 }
 
 button {
-    background-color: #ff5733;
-    color: #fff;
+    background-color: rgb(49, 140, 163);
+    font-family: 'Montserrat Alternates', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #dfdfdf;
     padding: 10px 20px;
     border: none;
-    border-radius: 3px;
+    border-radius: 20px;
     cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 button:hover {
-    background-color: #ff4422;
+    background-color: rgb(90, 162, 221);
+    color: rgb(22, 22, 22);
 }
 
+
+
 #resultados {
-    background-color: #fff;
+    background-color: #181818;
     padding: 20px;
     margin-top: 20px;
     border-radius: 5px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7);
 }
 
 h2 {
-    color: #333;
+    color: #d1d1d1;
     margin-bottom: 10px;
 }
 
-pre {
+span#alocacaoFuncoes, span#informacoesAcolitos{
+    color: #d1d1d1;
     white-space: pre-wrap;
-    font-family: monospace;
     font-size: 14px;
     margin-bottom: 20px;
+    font-family: 'Montserrat', sans-serif;
 }
 
 @media screen and (max-width: 768px) {
-    .container {
-        max-width: 90%; /* Reduz a largura máxima */
-    }
-
     input[type="text"],
     input[type="number"] {
-        width: 100%; /* Alterado para 100% em telas menores */
+        width: 100%;
     }
 }
